@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 from setuptools import setup, find_packages
 import platform
@@ -30,15 +31,15 @@ except FileNotFoundError:
 
 if __name__ == "__main__":
     path = {
-            'win32': 'libs/extern_draco.dll',
-            'linux': 'libs/libextern_draco.so',
-            'darwin': 'libs/libextern_draco.dylib'
+            'win32': ['libs/extern_draco.dll', 'Windows', 'Microsoft :: Windows'],
+            'linux': ['libs/libextern_draco.so', 'Linux', 'POSIX :: Linux'],
+            'darwin': ['libs/libextern_draco.dylib', 'Mac OS-X', 'MacOS']
         }.get(sys.platform)
     if sys.platform == 'darwin':
         if platform.machine() == 'x86_64':
-            os.copy("pydracogltf/libs/x64/libextern_draco.dylib", "pydracogltf/libs/libextern_draco.dylib")
+            shutil.copy("pydracogltf/libs/x64/libextern_draco.dylib", "pydracogltf/libs/libextern_draco.dylib")
         else:
-            os.copy("pydracogltf/libs/arm64/libextern_draco.dylib", "pydracogltf/libs/libextern_draco.dylib")
+            shutil.copy("pydracogltf/libs/arm64/libextern_draco.dylib", "pydracogltf/libs/libextern_draco.dylib")
     setup(
         name=NAME,
         version=__version__,
@@ -54,11 +55,12 @@ if __name__ == "__main__":
         long_description=_long_description,
         long_description_content_type="text/markdown",
         package_data={
-            "pydracogltf": [path]
+            "pydracogltf": [path[0]]
         },
+        platforms=[path[1]],
         classifiers=[
             "Programming Language :: Python :: 3",
             f"License :: OSI Approved :: {LICENSE}",
-            "Operating System :: OS Independent",
+            f"Operating System :: {path[2]}",
         ]
     )
