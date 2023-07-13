@@ -1,16 +1,14 @@
 import os
 import sys
 from setuptools import setup, find_packages
+import platform
 
-NAME = "package_name"
-AUTHOR = "your user name"
-EMAIL = "your email"
-URL = "your project url"
-LICENSE = "your license"
-DESCRIPTION = "your project description"
-
-if sys.version_info < (3, 6, 0):
-    raise RuntimeError(f"{NAME} requires Python >=3.6.0, but yours is {sys.version}!")
+NAME = "pydracogltf"
+AUTHOR = "Liang Ding"
+EMAIL = "liangding1990@163.com"
+URL = "https://github.com/seed93/pydracogltf"
+LICENSE = "MIT"
+DESCRIPTION = "wrapper of blender draco gltf lib, used for trimesh gltf io"
 
 try:
     lib_py = os.path.join(NAME, "__init__.py")
@@ -31,6 +29,16 @@ except FileNotFoundError:
     _long_description = ""
 
 if __name__ == "__main__":
+    path = {
+            'win32': 'libs/extern_draco.dll',
+            'linux': 'libs/libextern_draco.so',
+            'darwin': 'libs/libextern_draco.dylib'
+        }.get(sys.platform)
+    if sys.platform == 'darwin':
+        if platform.machine() == 'x86_64':
+            os.copy("pydracogltf/libs/x64/libextern_draco.dylib", "pydracogltf/libs/libextern_draco.dylib")
+        else:
+            os.copy("pydracogltf/libs/arm64/libextern_draco.dylib", "pydracogltf/libs/libextern_draco.dylib")
     setup(
         name=NAME,
         version=__version__,
@@ -45,19 +53,12 @@ if __name__ == "__main__":
         install_requires=open("./requirements.txt", "r").read().splitlines(),
         long_description=_long_description,
         long_description_content_type="text/markdown",
-        entry_points={
-            "console_scripts": [
-                "package_name=package_name.shell:run"
-            ]
-        },
         package_data={
-            "package_name": ["src/*.txt"]
+            "pydracogltf": [path]
         },
-        zip_safe=True,
         classifiers=[
             "Programming Language :: Python :: 3",
             f"License :: OSI Approved :: {LICENSE}",
             "Operating System :: OS Independent",
-        ],
-        python_requires=">=3.6"
+        ]
     )
