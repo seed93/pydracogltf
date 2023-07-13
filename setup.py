@@ -7,7 +7,7 @@ NAME = "pydracogltf"
 AUTHOR = "Liang Ding"
 EMAIL = "liangding1990@163.com"
 URL = "https://github.com/seed93/pydracogltf"
-LICENSE = "MIT"
+LICENSE = "MIT License"
 DESCRIPTION = "wrapper of blender draco gltf lib, used for trimesh gltf io"
 
 try:
